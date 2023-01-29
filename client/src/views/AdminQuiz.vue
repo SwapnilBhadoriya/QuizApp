@@ -1,20 +1,40 @@
 <template>
 
-    <div>
+    <div class="container">
+        <h2 class="fw-bold text-secondary">Quiz Details :</h2>
+        <div class="container-fluid d-flex flex-column">
+            <label class="form-label p-1 text-white" for="">Quiz Title : <input type="text"
+                    class="form-control m-1" v-model="quizTitle"></label>
+            <label class="form-label p-1 text-white" for="">Quiz Description : <input type="text"
+                    class="form-control m-1" v-model="quizDescription"></label>
+            <button class="btn btn-success w-50 m-1 d-block m-auto" @click="createQuiz">Create Quiz</button>
+        </div>
 
-        <button>Create a New Quiz</button>
-        <button>Search and add Question</button>
-        <button>Add a custom Question.</button>
-        <div class="container-md text-white">
-            <div class="mb-3">
+
+        <div class="text-center m-2">
+            <button class="btn btn-secondary m-1" @click="show = 'search'">Search and add Question</button>
+            <button class="btn btn-secondary m-1" @click="show = 'custom'">Add a custom Question.</button>
+            <button class="btn btn-secondary m-1" @click="show = 'preview'">Quiz Preview</button>
+        </div>
+
+
+        <!-- Search and Add -->
+        <div v-if="show === 'search'" class="container-md">
+            <input type="text" class="form-control" placeholder="search">
+        </div>
+
+
+        <!-- Custom question Box -->
+        <div v-if="show === 'custom'" class="container-md m-3 text-center text-white">
+            <div class="m-1">
                 <label for="questionText" class="form-label">Question :</label>
-                <input type="email" class="form-control" id="exampleFormControlInput1"
+                <input type="email" class="form-control w-80" id="exampleFormControlInput1"
                     placeholder="Type the question here" v-model="customQuestion.questionText">
             </div>
 
             <div class="container-sm">
 
-                <div class="mb-3" v-for="option, index in customQuestion.options">
+                <div class="m-1 d-flex align-items-center " v-for="option, index in customQuestion.options">
                     <label :for="'option' + index" class="form-label">Option :{{ index+ 1 }}</label>
                     <input class="form-control m-1 w-50" placeholder="Type the option here" :id="'option' + index"
                         type="text" v-model="customQuestion.options[index]">
@@ -28,15 +48,28 @@
                             {{ answer }}
                         </option>
 
+
+
                     </select>
                     <p class="fw-bold">Correct Answer : {{ customQuestion.correctAnswer }}</p>
                 </div>
             </div>
-            
+
 
             <button @click="addToQuiz" class="btn btn-dark">Add to Quiz </button>
-            <button @click="createQuiz" class="btn btn-dark">Create Quiz </button>
+
         </div>
+
+
+        <!-- Preview Questions -->
+        <div v-if="show === 'preview'">
+            <div v-if="questions.length == 0">
+                <p class="fw-bold text-white text-center">No Questions added in the quiz .</p>
+            </div>
+            <question v-for="question, index in questions" :key="'q' + index" :questionText="question.questionText"
+                :options="question.options"></question>
+        </div>
+
     </div>
 
 
@@ -44,11 +77,16 @@
 
 <script>
 
-import admin from '../services/admin'
+import admin from '../services/admin';
+import question from '../components/question.vue';
 export default {
+    components: {
+        question
+    },
     data: function () {
 
         return {
+            show:'',
             questions: [],
             quizTitle: '',
             quizDescription: '',

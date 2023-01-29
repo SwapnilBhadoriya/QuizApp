@@ -1,3 +1,5 @@
+const {pool} = require('../config/dbConfig');
+
 const createQuizHandler = async function(req,res){
 
     try {
