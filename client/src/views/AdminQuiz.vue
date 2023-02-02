@@ -1,10 +1,11 @@
 <template>
 
     <div class="container">
+        <RouterLink to="/admin">Home</RouterLink>
         <h2 class="fw-bold text-secondary">Quiz Details :</h2>
         <div class="container-fluid d-flex flex-column">
-            <label class="form-label p-1 text-white" for="">Quiz Title : <input type="text"
-                    class="form-control m-1" v-model="quizTitle"></label>
+            <label class="form-label p-1 text-white" for="">Quiz Title : <input type="text" class="form-control m-1"
+                    v-model="quizTitle"></label>
             <label class="form-label p-1 text-white" for="">Quiz Description : <input type="text"
                     class="form-control m-1" v-model="quizDescription"></label>
             <button class="btn btn-success w-50 m-1 d-block m-auto" @click="createQuiz">Create Quiz</button>
@@ -20,7 +21,8 @@
 
         <!-- Search and Add -->
         <div v-if="show === 'search'" class="container-md">
-            <input type="text" class="form-control" placeholder="search">
+            <input v-model="keyword" type="text" class="m-1 form-control" placeholder="Search">
+            <button class=" d-block m-auto fw-bold btn btn-dark border " @click="searchQuestions">Search</button>
         </div>
 
 
@@ -86,7 +88,8 @@ export default {
     data: function () {
 
         return {
-            show:'',
+            keyword: '',
+            show: '',
             questions: [],
             quizTitle: '',
             quizDescription: '',
@@ -106,7 +109,7 @@ export default {
 
     methods: {
 
-        createQuiz: function () {
+        createQuiz: async function () {
             try {
                 admin.createQuiz('/create', this.quizDetails).then((response) => {
                     console.log(response.data);
@@ -117,7 +120,9 @@ export default {
             }
 
         },
-
+        searchQuestions: function () {
+            admin.searchQuestions(this.keyword).then((response) => { console.log(response.data) })
+        },
         addToQuiz: function () {
             const { questionText, options, correctAnswer } = this.customQuestion;
             let flag = 0;
@@ -126,9 +131,14 @@ export default {
                     flag = 1;
                 }
             }
+            const copy = { ...this.customQuestion };
+            console.log(this.questions)
             if (questionText !== '' && correctAnswer != '' && flag != 1) {
-                alert('hello world')
-                this.questions.push(this.customQuestion);
+
+                this.questions.push(copy);
+                this.customQuestionquestionText = '';
+                this.customQuestionoptions = ['', '', '', ''];
+                this.customQuestioncorrectAnswer = ''
                 console.log(this.customQuestion);
             }
             else {

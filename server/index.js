@@ -9,11 +9,13 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 //routers
+const userRouter = require('./routes/user');
 const adminRouter = require("./routes/admin");
 
 
 //routes
 app.use('/admin',adminRouter);
+app.use('/user',userRouter);
 
 
 

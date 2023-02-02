@@ -7,9 +7,10 @@
             </div>
 
         </div>
-        <div class="p-4">
-            <div class="p-1 fw-bold m-1" v-for="option,index in options">{{index +' ' +option }}</div>
+        <div class="p-1">
+            <div class="quizOption" v-for="option in options">{{ option }}</div>
         </div>
+
     </div>
 
 
@@ -19,14 +20,23 @@
 
 <script>
 export default {
-    props: ['questionText', 'options','answer'],
+    props: ['questionText', 'options', 'answer'],
     data: function () {
         return {
+            hover: 'false',
+
         }
     }
 }
 </script>
 
-<style>
+<style scoped>
+.quizOption {
+    cursor: pointer;
+}
 
+.quizOption:hover {
+    color: mediumseagreen;
+    padding-left: 10px;
+}
 </style>
