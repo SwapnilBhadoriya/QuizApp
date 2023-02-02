@@ -14,37 +14,39 @@
         </div>
 
         <div v-if="show === 'Quiz'" class="quiz-container container-fluid">
+
             <h1>{{ currentQuiz.name }}</h1>
+            <button @click="show = 'Quizzes'; answers = [];" class="btn btn-dark rounded m-2">Quit Quiz</button>
             <div v-for="question, index in questions" class="question-container m-2">
                 <h3>{{ index + 1 }}. {{ question.question }}</h3>
 
                 <div class="form-check">
                     <input class="form-check-input" type="radio" :value="question.option1" v-model="answers[index]"
-                        :id="'question-{{ index }}-option1'">
-                    <label class="form-check-label" :for="'question-{{ index }}-option1'">{{ question.option1 }}</label>
+                        :id="'option1'+index">
+                    <label class="form-check-label" :for="'option1'+index">{{ question.option1 }}</label>
                 </div>
 
                 <div class="form-check">
                     <input class="form-check-input" type="radio" :value="question.option2" v-model="answers[index]"
-                        :id="'question-{{ index }}-option2'">
-                    <label class="form-check-label" :for="'question-{{ index }}-option2'">{{ question.option2 }}</label>
+                        :id="'option2'+index">
+                    <label class="form-check-label" :for="'option2'+index">{{ question.option2 }}</label>
                 </div>
 
                 <div class="form-check">
                     <input class="form-check-input" type="radio" :value="question.option3" v-model="answers[index]"
-                        :id="'question-{{ index }}-option3'">
-                    <label class="form-check-label" :for="'question-{{ index }}-option3'">{{ question.option3 }}</label>
+                        :id="'option3'+index">
+                    <label class="form-check-label" :for="'option3'+index">{{ question.option3 }}</label>
                 </div>
 
                 <div class="form-check">
                     <input class="form-check-input" type="radio" :value="question.option4" v-model="answers[index]"
-                        :id="'question-{{ index }}-option4'">
-                    <label class="form-check-label" :for="'question-{{ index }}-option4'">{{ question.option4 }}</label>
+                        :id="'option4'+index">
+                    <label class="form-check-label" :for="'option4'+index">{{ question.option4 }}</label>
                 </div>
-                <button @click="removeSelection(index)" v-if="answers[index] !== ''" class="btn btn-secondary">Remove
+                <button v-if="answers[index] !== ''" @click="removeSelection(index)"  class="btn btn-secondary">Remove
                     Selection</button>
             </div>
-            <button @click="getResult(currentQuiz.id)" class="btn btn-success">Submit</button>
+            <button @click="getResult(currentQuiz.id)" class="btn btn-success m-3">Submit</button>
 
 
         </div>

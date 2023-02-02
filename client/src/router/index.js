@@ -19,7 +19,7 @@ const routes = [
   { path: "/admin/manage", component: AdminManage },
   { path: "/admin/manage/:quizId", component: EditQuiz },
   { path: "/admin", component: AdminHome },
-  { path: "/user", component: UserHome },
+  { path: "/user/:id", component: UserHome },
 ];
 
 const router = new VueRouter({

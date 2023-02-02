@@ -64,10 +64,10 @@ export default {
                 return;
             }
             this.status = true;
-            axios.post('http://localhost:3000/register', this.formData).then((res) => {
+            axios.post('http://localhost:5000/register', this.formData).then((res) => {
                 console.log(res.data);
                 localStorage.setItem('token', res.data.token);
-                router.push({ path: '/user/' + res.data.id + '/todos' })
+                router.push({ path: '/user/' + res.data.id  })
                 this.status = false;
 
             }).catch((error) => {

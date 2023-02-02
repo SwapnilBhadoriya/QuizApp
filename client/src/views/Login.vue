@@ -52,7 +52,7 @@ export default {
     methods: {
         submitLoginForm() {
             this.status = true;
-            axios.post('http://localhost:3000/login', this.formData).then((res) => {
+            axios.post('http://localhost:5000/login', this.formData).then((res) => {
                 console.log(res.data);
                 localStorage.setItem('token', res.data.token);
                 router.push({ path: '/user/' + res.data.id + '/todos' })

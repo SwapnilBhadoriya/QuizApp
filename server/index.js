@@ -11,9 +11,11 @@ app.use(express.urlencoded({ extended: false }));
 //routers
 const userRouter = require('./routes/user');
 const adminRouter = require("./routes/admin");
+const authRouter = require('./routes/authenticate')
 
 
 //routes
+app.use('/',authRouter);
 app.use('/admin',adminRouter);
 app.use('/user',userRouter);
 
