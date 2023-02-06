@@ -1,8 +1,9 @@
 <template>
 
     <div class=" container container-md " style="max-width: 500px;">
-        <h1 class="h1 text-center m-3 p-3">Sign Up </h1>
         <Message v-if="showMessage" :message="msg"></Message>
+        <h1 class="h1 text-center m-3 p-3">Sign Up </h1>
+
         <div v-if="status" class="spinner-border" role="status">
             <span class="visually-hidden">Loading...</span>
         </div>
@@ -67,7 +68,7 @@ export default {
             axios.post('http://localhost:5000/register', this.formData).then((res) => {
                 console.log(res.data);
                 localStorage.setItem('token', res.data.token);
-                router.push({ path: '/user/' + res.data.id  })
+                router.push({ path: '/user/' + res.data.id })
                 this.status = false;
 
             }).catch((error) => {

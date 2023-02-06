@@ -1,7 +1,7 @@
 <template>
 
     <div class="container text-white">
-
+        <div><button @click="logOut" class="btn btn-dark">Logout</button></div>
         <div v-if="show === 'Quizzes'">
             <h1>All Quizzes </h1>
             <div class="quiz container-fluid rounded border border-secondary m-2 p-2" v-for="quiz in quizzes"
@@ -22,28 +22,28 @@
 
                 <div class="form-check">
                     <input class="form-check-input" type="radio" :value="question.option1" v-model="answers[index]"
-                        :id="'option1'+index">
-                    <label class="form-check-label" :for="'option1'+index">{{ question.option1 }}</label>
+                        :id="'option1' + index">
+                    <label class="form-check-label" :for="'option1' + index">{{ question.option1 }}</label>
                 </div>
 
                 <div class="form-check">
                     <input class="form-check-input" type="radio" :value="question.option2" v-model="answers[index]"
-                        :id="'option2'+index">
-                    <label class="form-check-label" :for="'option2'+index">{{ question.option2 }}</label>
+                        :id="'option2' + index">
+                    <label class="form-check-label" :for="'option2' + index">{{ question.option2 }}</label>
                 </div>
 
                 <div class="form-check">
                     <input class="form-check-input" type="radio" :value="question.option3" v-model="answers[index]"
-                        :id="'option3'+index">
-                    <label class="form-check-label" :for="'option3'+index">{{ question.option3 }}</label>
+                        :id="'option3' + index">
+                    <label class="form-check-label" :for="'option3' + index">{{ question.option3 }}</label>
                 </div>
 
                 <div class="form-check">
                     <input class="form-check-input" type="radio" :value="question.option4" v-model="answers[index]"
-                        :id="'option4'+index">
-                    <label class="form-check-label" :for="'option4'+index">{{ question.option4 }}</label>
+                        :id="'option4' + index">
+                    <label class="form-check-label" :for="'option4' + index">{{ question.option4 }}</label>
                 </div>
-                <button v-if="answers[index] !== ''" @click="removeSelection(index)"  class="btn btn-secondary">Remove
+                <button v-if="answers[index] !== ''" @click="removeSelection(index)" class="btn btn-secondary">Remove
                     Selection</button>
             </div>
             <button @click="getResult(currentQuiz.id)" class="btn btn-success m-3">Submit</button>
@@ -66,9 +66,11 @@
 import user from '../services/user'
 
 import Question from '@/components/question.vue';
+import admin from '@/services/admin';
 export default {
     created: function () {
-        user.getQuizzes().then((response) => {
+        const user_id = this.$route.params.id;
+        user.getQuizzes(user_id).then((response) => {
             this.quizzes = response.data.quizzes;
         }).catch((error) => {
             console.log(error);
@@ -77,7 +79,8 @@ export default {
     methods: {
         getResult: async function (quizId) {
             try {
-                user.getAnswers(quizId).then((response) => {
+                const user_id = this.$route.params.id;
+                user.getAnswers(user_id, quizId).then((response) => {
                     const correctAnswers = response.data.answers;
                     console.log(correctAnswers);
                     let correct = 0;
@@ -104,13 +107,17 @@ export default {
         },
         activateQuiz: function (quiz) {
             this.show = 'Quiz';
+            const user_id = this.$route.params.id;
             this.currentQuiz = quiz
-            user.getQuizQuestions(quiz.id).then((response) => {
+            user.getQuizQuestions(user_id, quiz.id).then((response) => {
                 this.questions = response.data.questions;
                 this.questions.forEach(element => {
                     this.answers.push('');
                 });
             })
+        },
+        logOut:function(){
+            admin.logOut();
         },
         removeSelection: function (index) {
             this.answers[index] = '';

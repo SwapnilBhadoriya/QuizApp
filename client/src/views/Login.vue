@@ -28,7 +28,10 @@
 
 
         </form>
-        <RouterLink to="/admin">Admin Login Here</RouterLink>
+        <input class="form-input" type="checkbox" v-model="admin">
+
+        <label class="m-1 text-white">Admin Login </label>
+
         <p class="mt-3 mb-0 text-white">Don't have an account </p>
         <RouterLink to="/register">Sign Up Here </RouterLink>
 
@@ -42,7 +45,7 @@ import Message from '../components/Message.vue'
 export default {
     components: { Message },
     data: function () {
-        return { email: '', password: '', showMessage: false, msg: '', status: false };
+        return { email: '', password: '', showMessage: false, msg: '', status: false, admin: false };
     },
     computed: {
         formData: function () {
@@ -55,7 +58,14 @@ export default {
             axios.post('http://localhost:5000/login', this.formData).then((res) => {
                 console.log(res.data);
                 localStorage.setItem('token', res.data.token);
-                router.push({ path: '/user/' + res.data.id + '/todos' })
+                localStorage.setItem('id', res.data.id);
+                if (this.admin) {
+                    router.push({ path: '/admin' })
+                }
+                else {
+                    router.push({ path: '/user/' + res.data.id })
+                }
+
                 this.status = false;
             }).catch((error) => {
                 if (error.response.status !== 201) {

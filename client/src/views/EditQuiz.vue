@@ -2,7 +2,7 @@
     <div class="container-md">
 
         <RouterLink to="/admin/manage"><button class="btn btn-primary">Go Back</button></RouterLink>
-
+        <Message v-if="showMsg" :message="msg" :success="status"></Message>
         <!-- Quiz Details Section -->
         <div class="container-sm w-50 d-flex flex-column">
             <label class="form-label p-1 text-white" for="">Quiz Title : <input type="text" class="form-control m-1"
@@ -128,8 +128,12 @@
 <script>
 import admin from '@/services/admin';
 import user from '@/services/user';
+import Message from '@/components/Message.vue';
 
 export default {
+    components: {
+        Message
+    },
     created: function () {
         this.fetchQuiz();
         this.fetchQuestions();
@@ -139,6 +143,7 @@ export default {
     data: function () {
         return {
             show: false,
+            showMsg: false,
             quiz: { name: '', description: '' },
             questions: [],
             customQuestion: {
@@ -146,20 +151,40 @@ export default {
                 options: ['', '', '', ''],
                 correctAnswer: ''
             },
+            msg: '',
+            status: false
         }
     },
     methods: {
         deleteQuestion: function (index) {
             admin.deleteQuestion(this.questions[index].question_id).then((response) => {
+                this.msg = 'Deleted Successfully ..'
+                this.showMsg = true;
+                this.status = true;
+                setTimeout(() => {
+                    this.msg = '';
+                    this.showMsg = false;
+                    this.status = false;
+                }, 3000);
                 this.fetchQuestions();
             }).catch((error) => {
                 console.log('Error in deleting the question', error)
             })
 
+
         },
         addQuestion: function () {
             const quizId = this.$route.params.quizId
-            admin.addQuestion(quizId,this.customQuestion).then((response)=>{
+            admin.addQuestion(quizId, this.customQuestion).then((response) => {
+                this.msg = 'Question Added Successfully ..'
+                this.showMsg = true;
+                this.status = true;
+                setTimeout(() => {
+                    this.msg = '';
+                    this.showMsg = false;
+                    this.status = false;
+                }, 3000);
+                this.show = false
                 this.fetchQuestions()
             })
         },
@@ -176,12 +201,28 @@ export default {
             }
 
             admin.updateQuestion(question.question_id, data).then((response) => {
+                this.msg = 'Updated Successfully ..'
+                this.showMsg = true;
+                this.status = true;
+                setTimeout(() => {
+                    this.msg = '';
+                    this.showMsg = false;
+                    this.status = false;
+                }, 3000);
                 this.fetchQuestions();
             })
         },
         updateQuizdetails: function () {
             const quizId = this.$route.params.quizId
             admin.updateQuiz(quizId, this.quiz).then((response) => {
+                this.msg = 'Quiz Details Updated Successfully ..'
+                this.showMsg = true;
+                this.status = true;
+                setTimeout(() => {
+                    this.msg = '';
+                    this.showMsg = false;
+                    this.status = false;
+                }, 3000);
                 this.fetchQuiz();
             }).catch((error) => {
                 console.log('Error in updation of quiz details', error);
@@ -196,7 +237,8 @@ export default {
         },
         fetchQuestions: function () {
             const quizId = this.$route.params.quizId
-            user.getQuizQuestions(quizId).then((response) => {
+            const id = localStorage.getItem('id')
+            user.getQuizQuestions(id, quizId).then((response) => {
                 this.questions = response.data.questions;
                 for (let i = 0; i < this.questions.length; i++) {
                     const question = this.questions[i];

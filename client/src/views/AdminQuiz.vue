@@ -81,13 +81,15 @@
 
 import admin from '../services/admin';
 import question from '../components/question.vue';
+import Message from '@/components/Message.vue';
 export default {
     components: {
-        question
+        question,Message
     },
     data: function () {
 
         return {
+            message:false,
             keyword: '',
             show: '',
             questions: [],

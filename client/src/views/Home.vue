@@ -1,10 +1,10 @@
 <template>
-  <div class="container">
+  <div class="container m-auto mt-3">
     <h1>QuizApp is an interactive and concise quiz application </h1>
 
     <h4 class="m-3 ">A complete solution for creating , managing and organising Quiz contests .</h4>
-    <RouterLink to="/user"><button class="addbtn">User</button></RouterLink>
-    <RouterLink to="/admin"><button class="addbtn">Admin</button></RouterLink>
+    <RouterLink to="/register"><button class="addbtn">Get Started Here</button></RouterLink>
+    
 
   </div>
 </template>

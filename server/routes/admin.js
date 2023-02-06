@@ -1,4 +1,5 @@
 const express = require("express");
+const {verifyAdmin} = require('../middlewares/auth')
 
 const router = express.Router();
 const {
@@ -11,6 +12,8 @@ const {
   deleteQuestion,
   addQuestion
 } = require("../controllers/admin");
+
+router.use(verifyAdmin);
 
 router.route("/create").post(createQuizHandler);
 router.route("/quizzes").get(getQuizzes);

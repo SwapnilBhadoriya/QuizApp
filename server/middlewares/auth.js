@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-const { pool } = require("../config/dbconfig");
+const { pool } = require("../config/dbConfig");
 const secretKey = "thisisaSecret";
 
 const generateToken = async function (payload) {
@@ -9,7 +9,6 @@ const generateToken = async function (payload) {
 
 const verifyToken = async function (req, res, next) {
   const token = req.headers.authorization;
-
   if (!token) {
     return res
       .status(401)
@@ -21,9 +20,10 @@ const verifyToken = async function (req, res, next) {
         .status(401)
         .json({ msg: "Log In Again Token Expired Invalid token" });
     }
-    const id = Number(req.params.id);
-    // console.log(req.params);
-    // console.log(decoded);
+    const id = Number(req.params.user_id);
+    
+    console.log(req.params);
+    console.log(decoded);
     if (id !== decoded.id) {
       return res.status(401).json({ msg: "Unauthorized access" });
     }
@@ -33,7 +33,10 @@ const verifyToken = async function (req, res, next) {
 };
 
 const verifyAdmin = async function (req, res, next) {
-  const token = req.headers.authorization;
+  
+  const token = req.headers.authorisation;
+  console.log('admin',token);
+  console.log(req.headers);
   if (!token) {
     return res
       .status(401)
